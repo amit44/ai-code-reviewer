@@ -9,7 +9,7 @@ import { map, catchError } from 'rxjs/operators';
 export class GeminiApiService {
 
   private apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
-  private apiKey = 'API_KEY_HERE';
+  private apiKey = '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';
 
   constructor(private http: HttpClient) {}
 
