@@ -1,0 +1,77 @@
+<mat-toolbar class="app-toolbar">
+  <div class="toolbar-content">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <mat-icon>code</mat-icon>
+      <span>AI Code Reviewer</span>
+    </div>
+    <span class="powered-text">Powered by Gemini AI</span>
+  </div>
+</mat-toolbar>
+
+<div class="disclaimer-bar">
+  Portfolio Demo — Maximum 3 reviews per session | Remaining: {{ getRemainingRequests() }}/3
+</div>
+
+<div class="main-content">
+  <div class="left-panel">
+    <h3>Paste Your Code</h3>
+    <p class="subtext">Supports Angular and TypeScript</p>
+
+    <mat-form-field class="full-width" appearance="outline">
+      <textarea matInput 
+                placeholder="Paste your Angular or TypeScript code here..." 
+                [(ngModel)]="codeInput" 
+                rows="18">
+      </textarea>
+    </mat-form-field>
+
+    <div class="button-row">
+      <button mat-raised-button 
+              color="primary" 
+              [disabled]="isLoading || !codeInput.trim() || requestCount >= maxRequests"
+              (click)="reviewCode()">
+        Review Code
+      </button>
+      <button mat-stroked-button 
+              style="margin-left: 8px;" 
+              (click)="clearAll()">
+        Clear
+      </button>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-area">
+      <mat-spinner diameter="36"></mat-spinner>
+      <span>Analyzing your code with Gemini AI...</span>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <h3>Review Results</h3>
+
+    <div *ngIf="!reviewResult && !isLoading && !hasError" class="empty-state">
+      <mat-icon>plagiarism</mat-icon>
+      <p>Paste your code and click Review Code</p>
+      <p>Results will appear here</p>
+    </div>
+
+    <div *ngIf="reviewResult" style="display: flex; flex-direction: column; height: 100%;">
+      <div class="success-header">
+        <mat-icon>check_circle</mat-icon>
+        <span>Analysis Complete</span>
+      </div>
+      <pre class="result-content">{{ reviewResult }}</pre>
+      <div>
+        <button mat-stroked-button 
+                class="copy-btn" 
+                (click)="copyToClipboard()">
+          {{ isCopied ? 'Copied!' : 'Copy Results' }}
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="hasError" class="error-box">
+      <mat-icon color="warn">error</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </div>
+</div>
